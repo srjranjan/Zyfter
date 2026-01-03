@@ -11,6 +11,7 @@ import { BottomNavigation, Screen } from './components/BottomNavigation';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 import { PWAIcons } from './components/PWAIcons';
 import { Toaster } from './components/ui/sonner';
+import { PWAProvider } from './context/PWAContext';
 import { requestPersistentStorage } from './utils/pwa';
 
 interface Set {
@@ -285,71 +286,73 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      <Toaster theme="dark" position="top-center" />
-      <PWAIcons />
-      <PWAInstallPrompt />
+    <PWAProvider>
+      <div className="min-h-screen bg-zinc-950">
+        <Toaster theme="dark" position="top-center" />
+        <PWAIcons />
+        <PWAInstallPrompt />
 
-      {/* Mobile Container */}
-      <div className="max-w-md mx-auto bg-zinc-950 min-h-screen relative">
-        {/* Main Content */}
-        <AnimatePresence mode="wait">
-          {currentScreen === 'home' && (
-            <HomeScreen
-              key="home"
-              workout={currentWorkout}
-              onUpdateExercise={handleUpdateExercise}
-              onDeleteExercise={handleDeleteExercise}
-              onAddExercise={() => setShowAddExercise(true)}
-              onEditExercise={handleEditExercise}
-            />
-          )}
+        {/* Mobile Container */}
+        <div className="max-w-md mx-auto bg-zinc-950 min-h-screen relative">
+          {/* Main Content */}
+          <AnimatePresence mode="wait">
+            {currentScreen === 'home' && (
+              <HomeScreen
+                key="home"
+                workout={currentWorkout}
+                onUpdateExercise={handleUpdateExercise}
+                onDeleteExercise={handleDeleteExercise}
+                onAddExercise={() => setShowAddExercise(true)}
+                onEditExercise={handleEditExercise}
+              />
+            )}
 
-          {currentScreen === 'planner' && (
-            <WeeklyPlannerScreen
-              key="planner"
-              workouts={workouts}
-              currentWeekStart={currentWeekStart}
-              onNavigateWeek={handleNavigateWeek}
-              onCopyPreviousWeek={handleCopyPreviousWeek}
-              onSelectDay={handleSelectDay}
-            />
-          )}
+            {currentScreen === 'planner' && (
+              <WeeklyPlannerScreen
+                key="planner"
+                workouts={workouts}
+                currentWeekStart={currentWeekStart}
+                onNavigateWeek={handleNavigateWeek}
+                onCopyPreviousWeek={handleCopyPreviousWeek}
+                onSelectDay={handleSelectDay}
+              />
+            )}
 
-          {currentScreen === 'analytics' && (
-            <AnalyticsScreen key="analytics" workouts={workouts} />
-          )}
+            {currentScreen === 'analytics' && (
+              <AnalyticsScreen key="analytics" workouts={workouts} />
+            )}
 
-          {currentScreen === 'settings' && (
-            <SettingsScreen
-              key="settings"
-              settings={settings}
-              onUpdateSettings={handleUpdateSettings}
-              onExportData={handleExportData}
-            />
-          )}
-        </AnimatePresence>
+            {currentScreen === 'settings' && (
+              <SettingsScreen
+                key="settings"
+                settings={settings}
+                onUpdateSettings={handleUpdateSettings}
+                onExportData={handleExportData}
+              />
+            )}
+          </AnimatePresence>
 
-        {/* Add/Edit Exercise Modal */}
-        <AnimatePresence>
-          {showAddExercise && (
-            <AddExerciseScreen
-              onClose={() => {
-                setShowAddExercise(false);
-                setEditingExercise(undefined);
-              }}
-              onSave={handleSaveExercise}
-              editExercise={editingExercise}
-            />
-          )}
-        </AnimatePresence>
+          {/* Add/Edit Exercise Modal */}
+          <AnimatePresence>
+            {showAddExercise && (
+              <AddExerciseScreen
+                onClose={() => {
+                  setShowAddExercise(false);
+                  setEditingExercise(undefined);
+                }}
+                onSave={handleSaveExercise}
+                editExercise={editingExercise}
+              />
+            )}
+          </AnimatePresence>
 
-        {/* Bottom Navigation */}
-        <BottomNavigation
-          currentScreen={currentScreen}
-          onNavigate={setCurrentScreen}
-        />
+          {/* Bottom Navigation */}
+          <BottomNavigation
+            currentScreen={currentScreen}
+            onNavigate={setCurrentScreen}
+          />
+        </div>
       </div>
-    </div>
+    </PWAProvider>
   );
 }
