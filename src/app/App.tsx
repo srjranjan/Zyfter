@@ -11,7 +11,8 @@ import { BottomNavigation, Screen } from './components/BottomNavigation';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 import { PWAIcons } from './components/PWAIcons';
 import { Toaster } from './components/ui/sonner';
-import { registerServiceWorker, requestPersistentStorage } from './utils/pwa';
+import { PWAProvider } from './context/PWAContext';
+import { requestPersistentStorage } from './utils/pwa';
 
 interface Set {
   setNumber: number;
@@ -50,7 +51,7 @@ const getInitialWorkouts = (): Record<string, Workout> => {
   // Create initial week with sample data
   const today = new Date();
   const workouts: Record<string, Workout> = {};
-  
+
   // Add today's workout
   const todayStr = format(today, 'yyyy-MM-dd');
   workouts[todayStr] = {
@@ -115,64 +116,8 @@ export default function App() {
 
   // Initialize PWA features
   useEffect(() => {
-    // Register service worker
-    registerServiceWorker();
-    
     // Request persistent storage
     requestPersistentStorage();
-    
-    // Add meta tags for PWA
-    const viewport = document.querySelector('meta[name="viewport"]');
-    if (viewport) {
-      viewport.setAttribute(
-        'content',
-        'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
-      );
-    }
-    
-    // Add theme color meta tag
-    let themeColor = document.querySelector('meta[name="theme-color"]');
-    if (!themeColor) {
-      themeColor = document.createElement('meta');
-      themeColor.setAttribute('name', 'theme-color');
-      document.head.appendChild(themeColor);
-    }
-    themeColor.setAttribute('content', '#10b981');
-    
-    // Add apple-mobile-web-app tags
-    const appleTags = [
-      { name: 'apple-mobile-web-app-capable', content: 'yes' },
-      { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-      { name: 'apple-mobile-web-app-title', content: 'Gym Tracker' },
-    ];
-    
-    appleTags.forEach(({ name, content }) => {
-      let tag = document.querySelector(`meta[name="${name}"]`);
-      if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute('name', name);
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', content);
-    });
-    
-    // Add manifest link
-    let manifest = document.querySelector('link[rel="manifest"]');
-    if (!manifest) {
-      manifest = document.createElement('link');
-      manifest.setAttribute('rel', 'manifest');
-      document.head.appendChild(manifest);
-    }
-    manifest.setAttribute('href', '/manifest.json');
-    
-    // Add apple touch icon
-    let appleIcon = document.querySelector('link[rel="apple-touch-icon"]');
-    if (!appleIcon) {
-      appleIcon = document.createElement('link');
-      appleIcon.setAttribute('rel', 'apple-touch-icon');
-      document.head.appendChild(appleIcon);
-    }
-    appleIcon.setAttribute('href', '/icon-512.png');
   }, []);
 
   // Save to localStorage whenever data changes
@@ -189,14 +134,14 @@ export default function App() {
     if (workouts[currentDate]) {
       return workouts[currentDate];
     }
-    
+
     const newWorkout: Workout = {
       date: currentDate,
       dayName: format(parseISO(currentDate), 'EEEE'),
       exercises: [],
       isRestDay: false,
     };
-    
+
     return newWorkout;
   };
 
@@ -210,7 +155,7 @@ export default function App() {
         ex.id === updatedExercise.id ? updatedExercise : ex
       ),
     };
-    
+
     setWorkouts({
       ...workouts,
       [currentDate]: updatedWorkout,
@@ -223,12 +168,12 @@ export default function App() {
       ...currentWorkout,
       exercises: currentWorkout.exercises.filter((ex) => ex.id !== id),
     };
-    
+
     setWorkouts({
       ...workouts,
       [currentDate]: updatedWorkout,
     });
-    
+
     toast.success('Exercise removed');
   };
 
@@ -245,20 +190,20 @@ export default function App() {
         ...exercise,
         id: Date.now().toString(),
       };
-      
+
       const updatedWorkout = {
         ...currentWorkout,
         exercises: [...currentWorkout.exercises, newExercise],
       };
-      
+
       setWorkouts({
         ...workouts,
         [currentDate]: updatedWorkout,
       });
-      
+
       toast.success('Exercise added');
     }
-    
+
     setShowAddExercise(false);
     setEditingExercise(undefined);
   };
@@ -279,7 +224,7 @@ export default function App() {
   const handleCopyPreviousWeek = () => {
     const prevWeekStart = addWeeks(currentWeekStart, -1);
     const newWorkouts = { ...workouts };
-    
+
     for (let i = 0; i < 7; i++) {
       const prevDate = format(
         new Date(prevWeekStart.getTime() + i * 24 * 60 * 60 * 1000),
@@ -289,7 +234,7 @@ export default function App() {
         new Date(currentWeekStart.getTime() + i * 24 * 60 * 60 * 1000),
         'yyyy-MM-dd'
       );
-      
+
       if (workouts[prevDate]) {
         newWorkouts[newDate] = {
           ...workouts[prevDate],
@@ -302,7 +247,7 @@ export default function App() {
         };
       }
     }
-    
+
     setWorkouts(newWorkouts);
     toast.success('Previous week copied successfully');
   };
@@ -326,7 +271,7 @@ export default function App() {
       settings,
       exportDate: new Date().toISOString(),
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: 'application/json',
     });
@@ -336,76 +281,78 @@ export default function App() {
     a.download = `gym-tracker-export-${format(new Date(), 'yyyy-MM-dd')}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    
+
     toast.success('Data exported successfully');
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      <Toaster theme="dark" position="top-center" />
-      <PWAIcons />
-      <PWAInstallPrompt />
-      
-      {/* Mobile Container */}
-      <div className="max-w-md mx-auto bg-zinc-950 min-h-screen relative">
-        {/* Main Content */}
-        <AnimatePresence mode="wait">
-          {currentScreen === 'home' && (
-            <HomeScreen
-              key="home"
-              workout={currentWorkout}
-              onUpdateExercise={handleUpdateExercise}
-              onDeleteExercise={handleDeleteExercise}
-              onAddExercise={() => setShowAddExercise(true)}
-              onEditExercise={handleEditExercise}
-            />
-          )}
-          
-          {currentScreen === 'planner' && (
-            <WeeklyPlannerScreen
-              key="planner"
-              workouts={workouts}
-              currentWeekStart={currentWeekStart}
-              onNavigateWeek={handleNavigateWeek}
-              onCopyPreviousWeek={handleCopyPreviousWeek}
-              onSelectDay={handleSelectDay}
-            />
-          )}
-          
-          {currentScreen === 'analytics' && (
-            <AnalyticsScreen key="analytics" workouts={workouts} />
-          )}
-          
-          {currentScreen === 'settings' && (
-            <SettingsScreen
-              key="settings"
-              settings={settings}
-              onUpdateSettings={handleUpdateSettings}
-              onExportData={handleExportData}
-            />
-          )}
-        </AnimatePresence>
+    <PWAProvider>
+      <div className="min-h-screen bg-zinc-950">
+        <Toaster theme="dark" position="top-center" />
+        <PWAIcons />
+        <PWAInstallPrompt />
 
-        {/* Add/Edit Exercise Modal */}
-        <AnimatePresence>
-          {showAddExercise && (
-            <AddExerciseScreen
-              onClose={() => {
-                setShowAddExercise(false);
-                setEditingExercise(undefined);
-              }}
-              onSave={handleSaveExercise}
-              editExercise={editingExercise}
-            />
-          )}
-        </AnimatePresence>
+        {/* Mobile Container */}
+        <div className="max-w-md mx-auto bg-zinc-950 min-h-screen relative">
+          {/* Main Content */}
+          <AnimatePresence mode="wait">
+            {currentScreen === 'home' && (
+              <HomeScreen
+                key="home"
+                workout={currentWorkout}
+                onUpdateExercise={handleUpdateExercise}
+                onDeleteExercise={handleDeleteExercise}
+                onAddExercise={() => setShowAddExercise(true)}
+                onEditExercise={handleEditExercise}
+              />
+            )}
 
-        {/* Bottom Navigation */}
-        <BottomNavigation
-          currentScreen={currentScreen}
-          onNavigate={setCurrentScreen}
-        />
+            {currentScreen === 'planner' && (
+              <WeeklyPlannerScreen
+                key="planner"
+                workouts={workouts}
+                currentWeekStart={currentWeekStart}
+                onNavigateWeek={handleNavigateWeek}
+                onCopyPreviousWeek={handleCopyPreviousWeek}
+                onSelectDay={handleSelectDay}
+              />
+            )}
+
+            {currentScreen === 'analytics' && (
+              <AnalyticsScreen key="analytics" workouts={workouts} />
+            )}
+
+            {currentScreen === 'settings' && (
+              <SettingsScreen
+                key="settings"
+                settings={settings}
+                onUpdateSettings={handleUpdateSettings}
+                onExportData={handleExportData}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Add/Edit Exercise Modal */}
+          <AnimatePresence>
+            {showAddExercise && (
+              <AddExerciseScreen
+                onClose={() => {
+                  setShowAddExercise(false);
+                  setEditingExercise(undefined);
+                }}
+                onSave={handleSaveExercise}
+                editExercise={editingExercise}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Bottom Navigation */}
+          <BottomNavigation
+            currentScreen={currentScreen}
+            onNavigate={setCurrentScreen}
+          />
+        </div>
       </div>
-    </div>
+    </PWAProvider>
   );
 }

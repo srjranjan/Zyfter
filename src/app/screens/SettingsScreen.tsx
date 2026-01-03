@@ -4,6 +4,7 @@ import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Label } from '../components/ui/label';
+import { usePWA } from '../context/PWAContext';
 
 interface Settings {
   weekStartDay: number;
@@ -22,6 +23,7 @@ export function SettingsScreen({
   onUpdateSettings,
   onExportData,
 }: SettingsScreenProps) {
+  const { install, canInstall } = usePWA();
   const weekDays = [
     'Sunday',
     'Monday',
@@ -96,11 +98,10 @@ export function SettingsScreen({
                   <button
                     key={day}
                     onClick={() => onUpdateSettings({ weekStartDay: index })}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      settings.weekStartDay === index
-                        ? 'bg-emerald-500 text-white'
-                        : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${settings.weekStartDay === index
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                      }`}
                   >
                     {day.slice(0, 3)}
                   </button>
@@ -126,11 +127,10 @@ export function SettingsScreen({
                     onClick={() =>
                       onUpdateSettings({ units: unit as 'kg' | 'lbs' })
                     }
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
-                      settings.units === unit
-                        ? 'bg-emerald-500 text-white'
-                        : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                    }`}
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${settings.units === unit
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                      }`}
                   >
                     {unit.toUpperCase()}
                   </button>
@@ -178,6 +178,26 @@ export function SettingsScreen({
           transition={{ delay: 0.3 }}
           className="mt-8 text-center"
         >
+          {canInstall && (
+            <Card className="bg-zinc-900 border-zinc-800 p-4 mb-6 text-left">
+              <div className="flex items-center gap-3 mb-3">
+                <Download size={20} className="text-zinc-400" />
+                <div>
+                  <Label className="text-white font-medium">Install App</Label>
+                  <p className="text-sm text-zinc-500">
+                    Add to home screen for offline use
+                  </p>
+                </div>
+              </div>
+              <Button
+                onClick={install}
+                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white"
+              >
+                Install Application
+              </Button>
+            </Card>
+          )}
+
           <p className="text-zinc-500 text-sm">Gym Tracker v1.0.0</p>
           <p className="text-zinc-600 text-xs mt-1">
             Track your progress, achieve your goals
