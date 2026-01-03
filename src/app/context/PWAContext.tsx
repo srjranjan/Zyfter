@@ -21,21 +21,35 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const handler = (e: Event) => {
+            console.log('beforeinstallprompt event fired');
             e.preventDefault();
             setDeferredPrompt(e as BeforeInstallPromptEvent);
 
             // Check if user has dismissed the prompt before
             const dismissed = localStorage.getItem('pwa-install-dismissed');
             if (!dismissed) {
+                console.log('Showing install prompt');
                 setShowPrompt(true);
+            } else {
+                console.log('Prompt dismissed before');
             }
         };
 
         window.addEventListener('beforeinstallprompt', handler);
 
         // Check if app is already installed
-        if (window.matchMedia('(display-mode: standalone)').matches) {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        console.log('Is standalone:', isStandalone);
+        if (isStandalone) {
             setShowPrompt(false);
+        }
+
+        // Fallback for Android: show custom prompt if not installed and not dismissed
+        const isAndroid = /Android/.test(navigator.userAgent);
+        const dismissed = localStorage.getItem('pwa-install-dismissed');
+        if (isAndroid && !isStandalone && !dismissed) {
+            console.log('Showing fallback prompt for Android');
+            setTimeout(() => setShowPrompt(true), 3000); // Delay to allow page load
         }
 
         return () => window.removeEventListener('beforeinstallprompt', handler);

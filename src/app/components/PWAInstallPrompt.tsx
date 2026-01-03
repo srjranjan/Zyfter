@@ -4,7 +4,17 @@ import { Button } from './ui/button';
 import { usePWA } from '../context/PWAContext';
 
 export function PWAInstallPrompt() {
-  const { showPrompt, install, dismiss } = usePWA();
+  const { showPrompt, install, dismiss, canInstall } = usePWA();
+
+  const handleInstall = () => {
+    if (canInstall) {
+      install();
+    } else {
+      // Fallback: show manual install instructions
+      alert('To install: Tap the menu (three dots) > "Install app" or "Add to Home Screen"');
+      dismiss(); // Hide prompt after showing instructions
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -31,11 +41,11 @@ export function PWAInstallPrompt() {
 
                 <div className="flex gap-2">
                   <Button
-                    onClick={install}
+                    onClick={handleInstall}
                     size="sm"
                     className="bg-emerald-500 hover:bg-emerald-600 text-white"
                   >
-                    Install
+                    {canInstall ? 'Install' : 'Install Manually'}
                   </Button>
                   <Button
                     onClick={dismiss}
