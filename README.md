@@ -1,6 +1,6 @@
 # Zyfter
 
-Zyfter — a web app codebase and PWA starter used in this workspace.
+[Zyfter](https://zyfter.netlify.app/) — a web app codebase and PWA starter used in this workspace. [Try it now](https://zyfter.netlify.app/)
 
 ## Running the code
 
