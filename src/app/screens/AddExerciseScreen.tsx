@@ -30,14 +30,22 @@ const MUSCLE_GROUPS = [
   'Shoulders',
   'Biceps',
   'Triceps',
-  'Legs',
   'Core',
   'Glutes',
   'Cardio',
+  'Forearms',
+  'Hamstrings',
+  'Quads',
+  'Calves',
+  'Adductors',
+  'Abductors',
 ];
+
 const COMMON_EXERCISES = [
-  // CHEST
+
+  // ===================== CHEST =====================
   { name: 'Barbell Bench Press', muscleGroup: 'Chest' },
+  { name: 'Flat Bench Press', muscleGroup: 'Chest' },
   { name: 'Incline Barbell Bench Press', muscleGroup: 'Chest' },
   { name: 'Decline Barbell Bench Press', muscleGroup: 'Chest' },
   { name: 'Close Grip Bench Press', muscleGroup: 'Chest' },
@@ -48,33 +56,40 @@ const COMMON_EXERCISES = [
   { name: 'Decline Dumbbell Press', muscleGroup: 'Chest' },
   { name: 'Neutral Grip Dumbbell Press', muscleGroup: 'Chest' },
   { name: 'Dumbbell Fly', muscleGroup: 'Chest' },
+  { name: 'Flat Dumbbell Fly', muscleGroup: 'Chest' },
   { name: 'Incline Dumbbell Fly', muscleGroup: 'Chest' },
   { name: 'Cable Fly', muscleGroup: 'Chest' },
+  { name: 'Cable Crossover', muscleGroup: 'Chest' },
   { name: 'Low to High Cable Fly', muscleGroup: 'Chest' },
   { name: 'High to Low Cable Fly', muscleGroup: 'Chest' },
   { name: 'Single Arm Cable Fly', muscleGroup: 'Chest' },
   { name: 'Machine Chest Press', muscleGroup: 'Chest' },
   { name: 'Incline Chest Press Machine', muscleGroup: 'Chest' },
   { name: 'Pec Deck Fly', muscleGroup: 'Chest' },
+  { name: 'Butterfly Machine', muscleGroup: 'Chest' },
   { name: 'Push-ups', muscleGroup: 'Chest' },
   { name: 'Wide Push-ups', muscleGroup: 'Chest' },
   { name: 'Decline Push-ups', muscleGroup: 'Chest' },
   { name: 'Chest Dips', muscleGroup: 'Chest' },
 
-  // BACK
+  // ===================== BACK =====================
   { name: 'Deadlift', muscleGroup: 'Back' },
+  { name: 'Conventional Deadlift', muscleGroup: 'Back' },
   { name: 'Sumo Deadlift', muscleGroup: 'Back' },
-  { name: 'Deficit Deadlift', muscleGroup: 'Back' },
+  { name: 'Trap Bar Deadlift', muscleGroup: 'Back' },
   { name: 'Rack Pull', muscleGroup: 'Back' },
+  { name: 'Deficit Deadlift', muscleGroup: 'Back' },
   { name: 'Romanian Deadlift', muscleGroup: 'Back' },
   { name: 'Snatch Grip Deadlift', muscleGroup: 'Back' },
   { name: 'Barbell Row', muscleGroup: 'Back' },
+  { name: 'Bent Over Row', muscleGroup: 'Back' },
   { name: 'Pendlay Row', muscleGroup: 'Back' },
   { name: 'Dumbbell Row', muscleGroup: 'Back' },
   { name: 'Single Arm Dumbbell Row', muscleGroup: 'Back' },
+  { name: 'Chest Supported Row', muscleGroup: 'Back' },
+  { name: 'Seal Row', muscleGroup: 'Back' },
   { name: 'T-Bar Row', muscleGroup: 'Back' },
   { name: 'Landmine Row', muscleGroup: 'Back' },
-  { name: 'Seal Row', muscleGroup: 'Back' },
   { name: 'Pull-ups', muscleGroup: 'Back' },
   { name: 'Wide Grip Pull-ups', muscleGroup: 'Back' },
   { name: 'Neutral Grip Pull-ups', muscleGroup: 'Back' },
@@ -88,15 +103,19 @@ const COMMON_EXERCISES = [
   { name: 'Straight Arm Pulldown', muscleGroup: 'Back' },
   { name: 'Face Pull', muscleGroup: 'Back' },
   { name: 'Back Extension', muscleGroup: 'Back' },
+  { name: 'Hyperextension', muscleGroup: 'Back' },
   { name: 'Reverse Hyperextension', muscleGroup: 'Back' },
   { name: 'Good Morning', muscleGroup: 'Back' },
+  { name: 'Dumbbell Shrugs', muscleGroup: 'Back' },
+  { name: 'Barbell Shrugs', muscleGroup: 'Back' },
 
-  // SHOULDERS
+  // ===================== SHOULDERS =====================
   { name: 'Barbell Overhead Press', muscleGroup: 'Shoulders' },
+  { name: 'Standing Military Press', muscleGroup: 'Shoulders' },
   { name: 'Push Press', muscleGroup: 'Shoulders' },
   { name: 'Dumbbell Shoulder Press', muscleGroup: 'Shoulders' },
-  { name: 'Arnold Press', muscleGroup: 'Shoulders' },
   { name: 'Seated Shoulder Press', muscleGroup: 'Shoulders' },
+  { name: 'Arnold Press', muscleGroup: 'Shoulders' },
   { name: 'Landmine Press', muscleGroup: 'Shoulders' },
   { name: 'Dumbbell Lateral Raise', muscleGroup: 'Shoulders' },
   { name: 'Cable Lateral Raise', muscleGroup: 'Shoulders' },
@@ -110,7 +129,7 @@ const COMMON_EXERCISES = [
   { name: 'Upright Row', muscleGroup: 'Shoulders' },
   { name: 'Wide Grip Upright Row', muscleGroup: 'Shoulders' },
 
-  // BICEPS
+  // ===================== BICEPS =====================
   { name: 'Barbell Curl', muscleGroup: 'Biceps' },
   { name: 'EZ Bar Curl', muscleGroup: 'Biceps' },
   { name: 'Wide Grip Curl', muscleGroup: 'Biceps' },
@@ -121,14 +140,16 @@ const COMMON_EXERCISES = [
   { name: 'Hammer Curl', muscleGroup: 'Biceps' },
   { name: 'Cross Body Hammer Curl', muscleGroup: 'Biceps' },
   { name: 'Incline Dumbbell Curl', muscleGroup: 'Biceps' },
-  { name: 'Concentration Curl', muscleGroup: 'Biceps' },
+  { name: 'Preacher Curl', muscleGroup: 'Biceps' },
   { name: 'Spider Curl', muscleGroup: 'Biceps' },
   { name: 'Cable Curl', muscleGroup: 'Biceps' },
   { name: 'Single Arm Cable Curl', muscleGroup: 'Biceps' },
   { name: 'High Cable Curl', muscleGroup: 'Biceps' },
   { name: 'Machine Bicep Curl', muscleGroup: 'Biceps' },
+  { name: 'Reverse Curl', muscleGroup: 'Biceps' },
+  { name: 'Reverse EZ Curl', muscleGroup: 'Biceps' },
 
-  // TRICEPS
+  // ===================== TRICEPS =====================
   { name: 'Close Grip Bench Press', muscleGroup: 'Triceps' },
   { name: 'Dips (Triceps Focus)', muscleGroup: 'Triceps' },
   { name: 'Skull Crushers', muscleGroup: 'Triceps' },
@@ -136,6 +157,7 @@ const COMMON_EXERCISES = [
   { name: 'Overhead Dumbbell Extension', muscleGroup: 'Triceps' },
   { name: 'Single Arm Dumbbell Extension', muscleGroup: 'Triceps' },
   { name: 'Overhead Cable Extension', muscleGroup: 'Triceps' },
+  { name: 'Overhead Rope Extension', muscleGroup: 'Triceps' },
   { name: 'Cable Pushdown', muscleGroup: 'Triceps' },
   { name: 'Rope Pushdown', muscleGroup: 'Triceps' },
   { name: 'V-Bar Pushdown', muscleGroup: 'Triceps' },
@@ -143,29 +165,62 @@ const COMMON_EXERCISES = [
   { name: 'Kickbacks', muscleGroup: 'Triceps' },
   { name: 'JM Press', muscleGroup: 'Triceps' },
 
-  // LEGS
-  { name: 'Back Squat', muscleGroup: 'Legs' },
-  { name: 'Front Squat', muscleGroup: 'Legs' },
-  { name: 'High Bar Squat', muscleGroup: 'Legs' },
-  { name: 'Low Bar Squat', muscleGroup: 'Legs' },
-  { name: 'Box Squat', muscleGroup: 'Legs' },
-  { name: 'Leg Press', muscleGroup: 'Legs' },
-  { name: 'Hack Squat', muscleGroup: 'Legs' },
-  { name: 'Bulgarian Split Squat', muscleGroup: 'Legs' },
-  { name: 'Walking Lunges', muscleGroup: 'Legs' },
-  { name: 'Reverse Lunges', muscleGroup: 'Legs' },
-  { name: 'Step-ups', muscleGroup: 'Legs' },
-  { name: 'Leg Extension', muscleGroup: 'Legs' },
-  { name: 'Seated Leg Curl', muscleGroup: 'Legs' },
-  { name: 'Lying Leg Curl', muscleGroup: 'Legs' },
-  { name: 'Romanian Deadlift', muscleGroup: 'Legs' },
-  { name: 'Stiff Leg Deadlift', muscleGroup: 'Legs' },
-  { name: 'Hip Thrust', muscleGroup: 'Legs' },
-  { name: 'Barbell Glute Bridge', muscleGroup: 'Legs' },
-  { name: 'Cable Pull Through', muscleGroup: 'Legs' },
-  { name: 'Cable Kickback', muscleGroup: 'Legs' },
+  // ===================== QUADS =====================
+  { name: 'Back Squat', muscleGroup: 'Quads' },
+  { name: 'Front Squat', muscleGroup: 'Quads' },
+  { name: 'High Bar Squat', muscleGroup: 'Quads' },
+  { name: 'Heel Elevated Squat', muscleGroup: 'Quads' },
+  { name: 'Goblet Squat', muscleGroup: 'Quads' },
+  { name: 'Box Squat', muscleGroup: 'Quads' },
+  { name: 'Hack Squat', muscleGroup: 'Quads' },
+  { name: 'Leg Press', muscleGroup: 'Quads' },
+  { name: 'Narrow Leg Press', muscleGroup: 'Quads' },
+  { name: 'Bulgarian Split Squat', muscleGroup: 'Quads' },
+  { name: 'Walking Lunges', muscleGroup: 'Quads' },
+  { name: 'Reverse Lunges', muscleGroup: 'Quads' },
+  { name: 'Step-ups', muscleGroup: 'Quads' },
+  { name: 'Leg Extension', muscleGroup: 'Quads' },
+  { name: 'Wall Sit', muscleGroup: 'Quads' },
+  { name: 'Pistol Squat', muscleGroup: 'Quads' },
+  { name: 'Jump Squats', muscleGroup: 'Quads' },
 
-  // CALVES
+  // ===================== HAMSTRINGS =====================
+  { name: 'Romanian Deadlift', muscleGroup: 'Hamstrings' },
+  { name: 'Stiff Leg Deadlift', muscleGroup: 'Hamstrings' },
+  { name: 'Seated Leg Curl', muscleGroup: 'Hamstrings' },
+  { name: 'Lying Leg Curl', muscleGroup: 'Hamstrings' },
+  { name: 'Nordic Ham Curl', muscleGroup: 'Hamstrings' },
+  { name: 'Glute Ham Raise', muscleGroup: 'Hamstrings' },
+  { name: 'Cable Hamstring Curl', muscleGroup: 'Hamstrings' },
+  { name: 'Single Leg Romanian Deadlift', muscleGroup: 'Hamstrings' },
+
+  // ===================== GLUTES =====================
+  { name: 'Hip Thrust', muscleGroup: 'Glutes' },
+  { name: 'Barbell Hip Thrust', muscleGroup: 'Glutes' },
+  { name: 'Dumbbell Hip Thrust', muscleGroup: 'Glutes' },
+  { name: 'Glute Bridge', muscleGroup: 'Glutes' },
+  { name: 'Barbell Glute Bridge', muscleGroup: 'Glutes' },
+  { name: 'Cable Pull Through', muscleGroup: 'Glutes' },
+  { name: 'Cable Kickback', muscleGroup: 'Glutes' },
+  { name: 'Machine Kickback', muscleGroup: 'Glutes' },
+  { name: 'Smith Machine Hip Thrust', muscleGroup: 'Glutes' },
+  { name: 'Frog Pumps', muscleGroup: 'Glutes' },
+  { name: 'Step-back Lunges', muscleGroup: 'Glutes' },
+
+  // ===================== ADDUCTORS =====================
+  { name: 'Hip Adduction Machine', muscleGroup: 'Adductors' },
+  { name: 'Cable Hip Adduction', muscleGroup: 'Adductors' },
+  { name: 'Cossack Squat', muscleGroup: 'Adductors' },
+  { name: 'Sumo Squat', muscleGroup: 'Adductors' },
+  { name: 'Wide Stance Leg Press', muscleGroup: 'Adductors' },
+
+  // ===================== ABDUCTORS =====================
+  { name: 'Hip Abduction Machine', muscleGroup: 'Abductors' },
+  { name: 'Cable Hip Abduction', muscleGroup: 'Abductors' },
+  { name: 'Banded Side Walks', muscleGroup: 'Abductors' },
+  { name: 'Clamshells', muscleGroup: 'Abductors' },
+
+  // ===================== CALVES =====================
   { name: 'Standing Calf Raise', muscleGroup: 'Calves' },
   { name: 'Seated Calf Raise', muscleGroup: 'Calves' },
   { name: 'Single Leg Calf Raise', muscleGroup: 'Calves' },
@@ -173,7 +228,7 @@ const COMMON_EXERCISES = [
   { name: 'Leg Press Calf Raise', muscleGroup: 'Calves' },
   { name: 'Smith Machine Calf Raise', muscleGroup: 'Calves' },
 
-  // CORE
+  // ===================== CORE =====================
   { name: 'Plank', muscleGroup: 'Core' },
   { name: 'Side Plank', muscleGroup: 'Core' },
   { name: 'Weighted Plank', muscleGroup: 'Core' },
@@ -189,7 +244,7 @@ const COMMON_EXERCISES = [
   { name: 'Pallof Press', muscleGroup: 'Core' },
   { name: 'Ab Wheel Rollout', muscleGroup: 'Core' },
 
-  // FOREARMS
+  // ===================== FOREARMS =====================
   { name: 'Wrist Curl', muscleGroup: 'Forearms' },
   { name: 'Reverse Wrist Curl', muscleGroup: 'Forearms' },
   { name: 'Behind the Back Wrist Curl', muscleGroup: 'Forearms' },
@@ -198,7 +253,7 @@ const COMMON_EXERCISES = [
   { name: 'Plate Pinch Hold', muscleGroup: 'Forearms' },
   { name: 'Towel Pull-ups', muscleGroup: 'Forearms' },
 
-  // CARDIO
+  // ===================== CARDIO =====================
   { name: 'Treadmill Running', muscleGroup: 'Cardio' },
   { name: 'Incline Walking', muscleGroup: 'Cardio' },
   { name: 'Stationary Cycling', muscleGroup: 'Cardio' },
@@ -207,6 +262,7 @@ const COMMON_EXERCISES = [
   { name: 'Jump Rope', muscleGroup: 'Cardio' },
   { name: 'Battle Ropes', muscleGroup: 'Cardio' },
   { name: 'Sled Push', muscleGroup: 'Cardio' },
+  { name: 'Sled Drag', muscleGroup: 'Cardio' },
 ];
 
 
